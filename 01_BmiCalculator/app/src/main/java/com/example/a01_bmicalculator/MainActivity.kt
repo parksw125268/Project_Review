@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                 height.text.clear()
                 weight.text.clear()
                 val intent = Intent(this, ResultActivity::class.java)
-                intent.putExtra("result",bmi)
+                intent.putExtra("result",bmi.toString())
                 intent.putExtra("resultText",bmiResult)
                 startActivity(intent)
 

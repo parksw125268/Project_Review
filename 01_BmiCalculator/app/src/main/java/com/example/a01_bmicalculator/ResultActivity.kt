@@ -26,11 +26,11 @@ class ResultActivity : AppCompatActivity(){
     }
 
     private fun initViews() {
-        val result1 = intent.getStringExtra("result")
+        val result1     = intent.getStringExtra("result")
         val resultText1 = intent.getStringExtra("resultText")
 
-        result.text = "$result1"
-        resultText.text = "$resultText1"
+        result.text = result1
+        resultText.text = resultText1
     }
 
     private fun bindViews() {
