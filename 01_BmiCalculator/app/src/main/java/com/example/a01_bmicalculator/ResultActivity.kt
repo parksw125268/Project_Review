@@ -29,7 +29,7 @@ class ResultActivity : AppCompatActivity(){
         val result1     = intent.getStringExtra("result")
         val resultText1 = intent.getStringExtra("resultText")
 
-        result.text = result1
+        "%.2f".format(result1?.toDouble()).also { result.text = it }
         resultText.text = resultText1
     }
 
