@@ -22,10 +22,6 @@ class MainActivity : AppCompatActivity() {
     private val numberPicker : NumberPicker by lazy {
         findViewById(R.id.numberPicker)
     }
-    /*p rivate val numberPicker = findViewById<NumberPicker>(R.id.numberPicker).apply{
-         minValue = 1
-       maxValue = 45
-    }   */
     private val addButton : Button by lazy {
        findViewById(R.id.addButton)
     }
