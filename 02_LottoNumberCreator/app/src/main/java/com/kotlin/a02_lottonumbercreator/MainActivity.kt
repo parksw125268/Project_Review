@@ -31,31 +31,28 @@ class MainActivity : AppCompatActivity() {
     private val initButton : Button by lazy {
        findViewById(R.id.initButton)
     }
-    private val lottoSet = mutableSetOf<Int>() //로또 번호
-
-
+    private val lottoList = mutableSetOf<Int>() //로또 번호
+    private val randomList = mutableListOf<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
        super.onCreate(savedInstanceState)
        setContentView(R.layout.activity_main)
        initViews()
        bindViews()
     }
-
     private fun initViews() {
        numberPicker.apply {
            minValue = 1
            maxValue = 45
        }
     }
-
     private fun bindViews() {
         addButton.setOnClickListener {
             val number = numberPicker.value
-            if (!lottoSet.contains(number)){
-                if (lottoSet.size < 5) {
-                    lottoSet.add(number)
-                    numberTextViewList[lottoSet.size - 1].isVisible = true
-                    numberTextViewList[lottoSet.size - 1].text = number.toString()
+            if (!lottoList.contains(number)){
+                if (lottoList.size < 5) {
+                    lottoList.add(number)
+                    numberTextViewList[lottoList.size - 1].isVisible = true
+                    numberTextViewList[lottoList.size - 1].text = number.toString()
                 }else{
                     Toast.makeText(this, "선택은 5개까지만 가능합니다.",Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
@@ -65,6 +62,27 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
         }
-
+        createButton.setOnClickListener {
+            numberPicker.minValue
+            for (i in numberPicker.minValue .. numberPicker.maxValue){
+                if (!lottoList.contains(i)){
+                    randomList.add(i)
+                }
+            }
+            randomList.shuffle()
+            for (i in 0 .. 5-lottoList.size){
+                lottoList.add(randomList[i])
+            }
+            setResultLottoNumber();
+        }
+    }
+    private fun setResultLottoNumber(){
+        lottoList.sorted()
+        lottoList.forEachIndexed { index, value->
+            numberTextViewList[index].apply{
+                text = "$value"
+                isVisible = true
+            }
+        }
     }
 }
