@@ -2,11 +2,15 @@ package com.kotlin.a02_lottonumbercreator
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
 import android.widget.Button
 import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
     private val numberTextViewList : List<TextView> by lazy {
@@ -32,7 +36,6 @@ class MainActivity : AppCompatActivity() {
        findViewById(R.id.initButton)
     }
     private val lottoList = mutableListOf<Int>() //로또 번호
-    private val randomList = mutableListOf<Int>()
     private var isCreate = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,8 +56,12 @@ class MainActivity : AppCompatActivity() {
             if (!lottoList.contains(number)){
                 if (lottoList.size < 5) {
                     lottoList.add(number)
-                    numberTextViewList[lottoList.size - 1].isVisible = true
-                    numberTextViewList[lottoList.size - 1].text = number.toString()
+                    numberTextViewList[lottoList.size - 1].apply {
+                        isVisible = true
+                        text = number.toString()
+                        setNumberColor(this,number)
+                    }
+
                 }else{
                     Toast.makeText(this, "선택은 5개까지만 가능합니다.",Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
@@ -66,13 +73,16 @@ class MainActivity : AppCompatActivity() {
         }
         createButton.setOnClickListener {
             if (isCreate){
-                Toast.makeText(this,"이미 생성되었습니다. 초기화 후 다시 시도해 주세요 ",Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                lottoList.clear()
             }
             isCreate = true
-            for (i in numberPicker.minValue .. numberPicker.maxValue){
+            numberTextViewList.forEach {
+                it.isVisible = false
+            }
+            val randomList = mutableListOf<Int>()
+            for (i in 1 .. 45){
                 if (!lottoList.contains(i)){
-                    randomList.add(i)
+                    randomList.add(i) //12345..45
                 }
             }
             randomList.shuffle()
@@ -91,11 +101,26 @@ class MainActivity : AppCompatActivity() {
     }
     private fun setResultLottoNumber(){
         lottoList.sort()
-        lottoList.forEachIndexed { index, value->
+        Log.d("2",lottoList.toString())
+        lottoList.forEachIndexed { index, value1->
             numberTextViewList[index].apply{
-                text = "$value"
+                text = "$value1"
                 isVisible = true
+                setNumberColor(this,value1)
+
             }
+        }
+    }
+
+    private fun setNumberColor(textview:TextView , value :Int) {
+        textview.gravity = Gravity.CENTER
+        when(value){
+            in 1 ..10 -> textview.background = ContextCompat.getDrawable(this,R.drawable.circle_yellow)
+            in 11..20 -> textview.background = ContextCompat.getDrawable(this,R.drawable.circle_blue)
+            in 21..30 -> textview.background = ContextCompat.getDrawable(this,R.drawable.circle_red)
+            in 31..40 -> textview.background = ContextCompat.getDrawable(this,R.drawable.circle_gray)
+            else      -> textview.background = ContextCompat.getDrawable(this,R.drawable.circle_green)
+
         }
     }
 }
