@@ -31,8 +31,10 @@ class MainActivity : AppCompatActivity() {
     private val initButton : Button by lazy {
        findViewById(R.id.initButton)
     }
-    private val lottoList = mutableSetOf<Int>() //로또 번호
+    private val lottoList = mutableListOf<Int>() //로또 번호
     private val randomList = mutableListOf<Int>()
+    private var isCreate = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
        super.onCreate(savedInstanceState)
        setContentView(R.layout.activity_main)
@@ -63,7 +65,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         createButton.setOnClickListener {
-            numberPicker.minValue
+            if (isCreate){
+                Toast.makeText(this,"이미 생성되었습니다. 초기화 후 다시 시도해 주세요 ",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            isCreate = true
             for (i in numberPicker.minValue .. numberPicker.maxValue){
                 if (!lottoList.contains(i)){
                     randomList.add(i)
@@ -75,9 +81,16 @@ class MainActivity : AppCompatActivity() {
             }
             setResultLottoNumber();
         }
+        initButton.setOnClickListener {
+            isCreate = false
+            lottoList.clear()
+            numberTextViewList.forEach {
+                it.isVisible = false
+            }
+        }
     }
     private fun setResultLottoNumber(){
-        lottoList.sorted()
+        lottoList.sort()
         lottoList.forEachIndexed { index, value->
             numberTextViewList[index].apply{
                 text = "$value"
