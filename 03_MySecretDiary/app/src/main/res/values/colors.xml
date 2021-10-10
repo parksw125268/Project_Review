@@ -7,4 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="login_button">#194CA3</color>
+    <color name="gray">#747D8C</color>
+    <color name="password_change">#D31B1B</color>
+    <color name="background">#7059C1</color>
+    <color name="keyboardLayout">#72C3C0</color>
 </resources>
